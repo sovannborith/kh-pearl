@@ -5,13 +5,13 @@
 @tailwind utilities;
 
 :root {
-  --bar-width: 16px;
+  --bar-width: 20px;
   --bar-height: 2px;
-  --hamburger-gap: 3px;
+  --hamburger-gap: 5px;
   --foreground: #333;
   --background: #fbfbfb;
   --hamburger-margin: 4px;
-  --animation-timing: 200ms ease-in-out;
+  --animation-timing: 400ms ease-in-out;
   --hamburger-height: calc(var(--bar-height) * 3 + var(--hamburger-gap) * 2);
   --padding: 10px;
   --screen-width: 100%;
@@ -29,6 +29,62 @@ body {
   padding: 10px;
 }
 
+.side-menu {
+  --x-width: calc(var(--hamburger-height) * 1.41421356237);
+  display: flex;
+  flex-direction: column;
+  gap: var(--hamburger-gap);
+  width: 20px;
+  position: absolute;
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  top: 20px;
+  height: calc(var(--bar-height) * 3 + var(--hamburger-gap) * 2);
+  right: calc(-100% + 30px);
+
+  z-index: 2;
+}
+.side-menu:has(input:focus-visible)::before,
+.side-menu:has(input:focus-visible)::after,
+.side-menu input:focus-visible {
+  border: 1px solid var(--background);
+  box-shadow: 0 0 0 1px var(--foreground);
+}
+.side-menu::before,
+.side-menu::after,
+.side-menu input {
+  content: "";
+  width: var(--bar-width);
+  height: var(--bar-height);
+  background-color: var(--background);
+  border-radius: 9999px;
+  transition: translate var(--animation-timing) 500ms,
+    transform var(--animation-timing), rotate var(--animation-timing) 300ms,
+    opacity var(--animation-timing), width var(--animation-timing);
+}
+.side-menu input {
+  appearance: none;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  pointer-events: none;
+  height: var(--bar-height);
+}
+.side-menu:has(input:checked)::before {
+  transform: translate(0, 7px);
+  rotate: 45deg;
+}
+
+.side-menu:has(input:checked)::after {
+  transform: translate(0, -7px);
+  rotate: -45deg;
+}
+
+.side-menu input:checked {
+  opacity: 0;
+  width: 0;
+}
 .hamburger-menu {
   /* --x-width: calc(var(--hamburger-height) * 1.41421356237); */
   --x-width: calc(var(--hamburger-height) * 1.42);
@@ -45,8 +101,8 @@ body {
   cursor: pointer;
 }
 
-.hamburger-menu:has(input:checked) {
-}
+/* .hamburger-menu:has(input:checked) {
+} */
 
 .hamburger-menu:has(input:focus-visible)::before,
 .hamburger-menu:has(input:focus-visible)::after,
