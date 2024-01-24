@@ -5,9 +5,9 @@
 @tailwind utilities;
 
 :root {
-  --bar-width: 20px;
+  --bar-width: 18px;
   --bar-height: 2px;
-  --hamburger-gap: 5px;
+  --hamburger-gap: 4px;
   --foreground: #333;
   --background: #fbfbfb;
   --hamburger-margin: 4px;
@@ -15,6 +15,7 @@
   --hamburger-height: calc(var(--bar-height) * 3 + var(--hamburger-gap) * 2);
   --padding: 10px;
   --screen-width: 100%;
+  --seconday-bg-color: #ff6e6e;
 }
 
 *,
@@ -26,7 +27,7 @@
 body {
   margin: 0;
   background-color: var(--background);
-  padding: 10px;
+  overflow: hidden;
 }
 
 .side-menu {
@@ -41,8 +42,7 @@ body {
   position: relative;
   top: 20px;
   height: calc(var(--bar-height) * 3 + var(--hamburger-gap) * 2);
-  right: calc(-100% + 30px);
-
+  right: calc(-100% + 25px);
   z-index: 2;
 }
 .side-menu:has(input:focus-visible)::before,
@@ -55,13 +55,22 @@ body {
 .side-menu::after,
 .side-menu input {
   content: "";
-  width: var(--bar-width);
+  width: 100%;
   height: var(--bar-height);
   background-color: var(--background);
   border-radius: 9999px;
-  transition: translate var(--animation-timing) 500ms,
-    transform var(--animation-timing), rotate var(--animation-timing) 300ms,
-    opacity var(--animation-timing), width var(--animation-timing);
+
+  transform-origin: center center;
+  transition: transform var(--animation-timing),
+    translate var(--animation-timing), opacity var(--animation-timing),
+    width var(--animation-timing);
+}
+.side-menu::before {
+  width: 50%;
+}
+.side-menu::after {
+  width: 50%;
+  transform: translateX(100%);
 }
 .side-menu input {
   appearance: none;
@@ -72,94 +81,31 @@ body {
   height: var(--bar-height);
 }
 .side-menu:has(input:checked)::before {
-  transform: translate(0, 7px);
-  rotate: 45deg;
+  width: 100%;
+  transform: translateY(6px) rotate(45deg);
 }
 
 .side-menu:has(input:checked)::after {
-  transform: translate(0, -7px);
-  rotate: -45deg;
+  width: 100%;
+  transform: translateY(-6px) rotate(-45deg);
 }
 
 .side-menu input:checked {
-  opacity: 0;
   width: 0;
-}
-.hamburger-menu {
-  /* --x-width: calc(var(--hamburger-height) * 1.41421356237); */
-  --x-width: calc(var(--hamburger-height) * 1.42);
-
-  display: flex;
-  flex-direction: column;
-  gap: var(--hamburger-gap);
-  width: max-content;
-  height: max-content;
-  position: relative;
-  top: 22px;
-  right: calc(-100% + 28px);
-  z-index: 2;
-  cursor: pointer;
-}
-
-/* .hamburger-menu:has(input:checked) {
-} */
-
-.hamburger-menu:has(input:focus-visible)::before,
-.hamburger-menu:has(input:focus-visible)::after,
-.hamburger-menu input:focus-visible {
-  border: 1px solid var(--background);
-  box-shadow: 0 0 0 1px var(--foreground);
-}
-.hamburger-menu::before,
-.hamburger-menu::after,
-.hamburger-menu input {
-  content: "";
-  width: var(--bar-width);
-  height: var(--bar-height);
-  background-color: var(--foreground);
-  border-radius: 9999px;
-  transform-origin: left center;
-  transition: opacity var(--animation-timing), width var(--animation-timing),
-    rotate var(--animation-timing), translate var(--animation-timing),
-    background-color var(--animation-timing);
-}
-
-.hamburger-menu input {
-  appearance: none;
-  padding: 0;
-  margin: 0;
-  outline: none;
-  pointer-events: none;
-}
-
-.hamburger-menu:has(input:checked)::before {
-  rotate: 45deg;
-  width: var(--x-width);
-  translate: 0 calc(var(--bar-height) / -2);
-}
-
-.hamburger-menu:has(input:checked)::after {
-  rotate: -45deg;
-  width: var(--x-width);
-  translate: 0 calc(var(--bar-height) / 2);
-}
-
-.hamburger-menu input:checked {
   opacity: 0;
-  width: 0;
 }
-
 .sidebar {
-  transition: translate var(--animation-timing);
-  translate: -100%;
-  padding: 0.5rem 1rem;
-  padding-top: calc(var(--hamburger-height) + var(--hamburger-margin) + 1rem);
-  background-color: var(--foreground);
-  color: var(--background);
-  max-width: 10rem;
+  position: fixed;
+  top: 60px;
+  right: 0;
+  min-width: 100%;
+  background-color: aqua;
   min-height: 100vh;
+  backdrop-filter: blur(20px);
+  transform: translateX(100%);
+  transition: transform var(--animation-timing);
+  z-index: 9999;
 }
-
-.hamburger-menu:has(input:checked) + .sidebar {
-  translate: 0;
+.side-menu:has(input:checked) ~ .sidebar {
+  transform: translateX(0%);
 }
